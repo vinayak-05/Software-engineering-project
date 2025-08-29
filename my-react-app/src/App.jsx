@@ -7,7 +7,7 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Schemes from "./pages/Schemes";
 import ProtectedRoute from "./components/ProtectedRoute";
-
+// import FarmerUpload from "./pages/FarmerUpload";
 function App() {
   return (
     <Router>
@@ -18,6 +18,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+              {/* <Route path="/farmer/upload" element={<FarmerUpload />} /> */}
             <Route
               path="/dashboard"
               element={

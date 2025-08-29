@@ -1,49 +1,29 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import api from "../services/api";
+import { useState } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
+import api from '../lib/api'
 
-function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+export default function Login() {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const navigate = useNavigate()
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await api.post("/auth/login", { email, password });
-      localStorage.setItem("token", res.data.token);
-      navigate("/dashboard");
-    } catch (err) {
-      alert("Invalid credentials");
-    }
-  };
+  const submit = async (e) => {
+    e.preventDefault()
+    const { data } = await api.post('/auth/login', { email, password })
+    localStorage.setItem('token', data.token)
+    localStorage.setItem('role', data.user.role)
+    navigate('/')
+  }
 
   return (
-    <div className="max-w-md mx-auto bg-white p-6 shadow rounded">
-      <h2 className="text-2xl font-bold mb-4">Login</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="email"
-          placeholder="Email"
-          className="w-full border p-2"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          className="w-full border p-2"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button className="bg-green-700 text-white px-4 py-2 rounded w-full">
-          Login
-        </button>
+    <div className='max-w-md mx-auto card'>
+      <h2 className='text-xl font-semibold mb-3'>Login</h2>
+      <form className='grid gap-3' onSubmit={submit}>
+        <input className='border rounded-lg p-2' placeholder='Email' value={email} onChange={e=>setEmail(e.target.value)} required/>
+        <input className='border rounded-lg p-2' type='password' placeholder='Password' value={password} onChange={e=>setPassword(e.target.value)} required/>
+        <button className='btn bg-black text-white' type='submit'>Login</button>
       </form>
+      <p className='text-sm text-gray-600 mt-3'>No account? <Link className='underline' to='/register'>Register</Link></p>
     </div>
-  );
+  )
 }
-
-export default Login;

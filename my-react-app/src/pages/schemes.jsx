@@ -1,30 +1,25 @@
-import { useEffect, useState } from "react";
-import api from "../services/api";
+import { useEffect, useState } from 'react'
+import api from '../lib/api'
 
-function Schemes() {
-  const [schemes, setSchemes] = useState([]);
+export default function Schemes() {
+  const [schemes, setSchemes] = useState([])
 
   useEffect(() => {
-    const fetchSchemes = async () => {
-      const res = await api.get("/schemes");
-      setSchemes(res.data);
-    };
-    fetchSchemes();
-  }, []);
+    api.get('/schemes').then(res => setSchemes(res.data))
+  }, [])
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-4">Government Schemes</h2>
-      <ul className="space-y-2">
-        {schemes.map((scheme, idx) => (
-          <li key={idx} className="p-4 border rounded shadow">
-            <h3 className="text-lg font-semibold">{scheme.title}</h3>
-            <p>{scheme.description}</p>
-          </li>
+    <div className='space-y-4'>
+      <h2 className='text-2xl font-bold'>Government Schemes</h2>
+      <div className='grid md:grid-cols-2 gap-4'>
+        {schemes.map(s => (
+          <div key={s.id} className='card'>
+            <div className='font-semibold text-lg'>{s.title}</div>
+            <p className='text-gray-600'>{s.description}</p>
+            <a className='underline text-sm' href={s.link} target='_blank' rel='noreferrer'>Learn more</a>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
-  );
+  )
 }
-
-export default Schemes;
