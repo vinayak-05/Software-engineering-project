@@ -1,17 +1,18 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import api from '../lib/api'
+import { AuthContext } from '../context/AuthContext'
 
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const navigate = useNavigate()
+  const { login } = useContext(AuthContext)
 
   const submit = async (e) => {
     e.preventDefault()
     const { data } = await api.post('/auth/login', { email, password })
-    localStorage.setItem('token', data.token)
-    localStorage.setItem('role', data.user.role)
+    login(data.token, data.user.role)
     navigate('/')
   }
 

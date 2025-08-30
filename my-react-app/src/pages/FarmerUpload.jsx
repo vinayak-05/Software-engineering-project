@@ -1,6 +1,7 @@
 // src/pages/FarmerUpload.js
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useState, useContext } from "react";
+import api from "../lib/api";
+import { AuthContext } from "../context/AuthContext";
 
 export default function FarmerUpload() {
   const [cropName, setCropName] = useState("");
@@ -8,18 +9,26 @@ export default function FarmerUpload() {
   const [quantity, setQuantity] = useState("");
   const [image, setImage] = useState(null);
   const [message, setMessage] = useState("");
+  const { token } = useContext(AuthContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!token) {
+      setMessage("Please login first to upload crops");
+      return;
+    }
 
     try {
       const formData = new FormData();
       formData.append("cropName", cropName);
       formData.append("price", price);
       formData.append("quantity", quantity);
-      formData.append("image", image);
+      if (image) {
+        formData.append("image", image);
+      }
 
-      const res = await axios.post("http://localhost:5000/api/farmer/upload", formData, {
+      const res = await api.post("/crops/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
@@ -30,7 +39,7 @@ export default function FarmerUpload() {
       setImage(null);
     } catch (err) {
       console.error(err);
-      setMessage("Error uploading crop");
+      setMessage(err.response?.data?.message || "Error uploading crop");
     }
   };
 

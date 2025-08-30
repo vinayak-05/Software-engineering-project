@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import api from '../lib/api'
+import api from "../services/api";   // ✅ must use this, not axios directly
+
 
 export default function Schemes() {
   const [schemes, setSchemes] = useState([])

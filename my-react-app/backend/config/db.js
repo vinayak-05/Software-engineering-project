@@ -3,11 +3,7 @@ import mongoose from "mongoose";
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGO_URI, {
-      // Note: These options are no longer needed in latest Mongoose (>=6.x)
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    const conn = await mongoose.connect(process.env.MONGO_URI);
 
     console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
@@ -16,11 +12,12 @@ const connectDB = async () => {
   }
 };
 
-// Optional: Close connection gracefully when app stops
+// Optional: Handle disconnection
 mongoose.connection.on("disconnected", () => {
   console.log("⚠️ MongoDB disconnected");
 });
 
+// Graceful shutdown
 process.on("SIGINT", async () => {
   await mongoose.connection.close();
   console.log("🔌 MongoDB connection closed due to app termination");

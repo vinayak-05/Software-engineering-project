@@ -1,6 +1,7 @@
 import express from "express";
 import multer from "multer";
 import Crop from "../models/Crop.js";
+import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
@@ -15,17 +16,17 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// 👉 Farmer: Upload crop
-router.post("/upload", upload.single("image"), async (req, res) => {
+// 👉 Farmer: Upload crop (protected route)
+router.post("/upload", protect, upload.single("image"), async (req, res) => {
   try {
-    const { name, price, quantity } = req.body;
+    const { cropName, price, quantity } = req.body;
 
     const crop = new Crop({
-      name,
+      name: cropName,
       price,
       quantity,
       image: req.file ? `/uploads/${req.file.filename}` : null,
-      uploadedBy: req.user ? req.user.id : null, // optional if using auth
+      farmer: req.user.id,
     });
 
     await crop.save();
