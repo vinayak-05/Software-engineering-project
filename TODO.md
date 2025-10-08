@@ -1,0 +1,3 @@
+- [x] Enhance ProductCard component: add image display, quantity selector, improved styling
+- [x] Enhance Marketplace component: add search bar, category filter, update layout
+- [x] Test the enhanced UI and fix text visibility issue

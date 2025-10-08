@@ -24,9 +24,9 @@ export default function Home() {
           >
             Explore Marketplace
           </Link>
-          <Link 
-            to="/register" 
-            className="px-6 py-3 rounded-2xl shadow-md bg-gray-100 font-semibold hover:bg-gray-200 transition"
+          <Link
+            to="/register"
+            className="px-6 py-3 rounded-2xl shadow-md bg-green-700 text-white font-semibold hover:bg-green-800 transition"
           >
             Join Now
           </Link>
