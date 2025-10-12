@@ -6,19 +6,32 @@ import { AuthContext } from '../context/AuthContext'
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [success, setSuccess] = useState('')
   const navigate = useNavigate()
   const { login } = useContext(AuthContext)
 
   const submit = async (e) => {
     e.preventDefault()
-    const { data } = await api.post('/auth/login', { email, password })
-    login(data.token, data.user.role)
-    navigate('/')
+    try {
+      const { data } = await api.post('/auth/login', { email, password })
+      setSuccess('Login successful!')
+      setTimeout(() => {
+        login(data.token, data.user.role)
+        navigate('/')
+      }, 2000)
+    } catch (err) {
+      console.error('Login error:', err)
+    }
   }
 
   return (
     <div className='max-w-md mx-auto card'>
       <h2 className='text-xl font-semibold mb-3'>Login</h2>
+      {success && (
+        <div className='bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4'>
+          {success}
+        </div>
+      )}
       <form className='grid gap-3' onSubmit={submit}>
         <input className='border rounded-lg p-2' placeholder='Email' value={email} onChange={e=>setEmail(e.target.value)} required/>
         <input className='border rounded-lg p-2' type='password' placeholder='Password' value={password} onChange={e=>setPassword(e.target.value)} required/>

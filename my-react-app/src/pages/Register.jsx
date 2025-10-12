@@ -6,6 +6,7 @@ import { AuthContext } from '../context/AuthContext'
 export default function Register() {
   const [form, setForm] = useState({ name: '', email: '', password: '', role: 'farmer' })
   const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
   const { login } = useContext(AuthContext)
@@ -13,12 +14,16 @@ export default function Register() {
   const submit = async (e) => {
     e.preventDefault()
     setError('')
+    setSuccess('')
     setLoading(true)
-    
+
     try {
       const { data } = await api.post('/auth/register', form)
-      login(data.token, data.user.role)
-      navigate('/')
+      setSuccess('Registration successful!')
+      setTimeout(() => {
+        login(data.token, data.user.role)
+        navigate('/')
+      }, 2000)
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed. Please try again.')
       console.error('Registration error:', err)
@@ -33,6 +38,11 @@ export default function Register() {
       {error && (
         <div className='bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4'>
           {error}
+        </div>
+      )}
+      {success && (
+        <div className='bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4'>
+          {success}
         </div>
       )}
       <form className='grid gap-3' onSubmit={submit}>

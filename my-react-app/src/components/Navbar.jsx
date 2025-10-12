@@ -1,11 +1,13 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useContext } from 'react'
 import { AuthContext } from '../context/AuthContext'
+import { useCart } from '../context/CartContext'
 
 export default function Navbar() {
   const navigate = useNavigate()
   const location = useLocation()
   const { token, role, logout } = useContext(AuthContext)
+  const { getItemCount } = useCart()
 
   const handleLogout = () => {
     if (window.confirm("Are you sure you want to log out?")) {
@@ -25,9 +27,22 @@ export default function Navbar() {
         <nav className="flex gap-4">
           <Link to="/marketplace" className={linkClasses("/marketplace")}>Marketplace</Link>
           <Link to="/schemes" className={linkClasses("/schemes")}>Schemes</Link>
+          {token && (
+            <>
+              <Link to="/cart" className={linkClasses("/cart")}>
+                🛒 Cart ({getItemCount()})
+              </Link>
+              <Link to="/contact" className={linkClasses("/contact")}>Contact</Link>
+            </>
+          )}
           {role === 'farmer' && (
             <Link to="/dashboard" className={linkClasses("/dashboard")}>
               Farmer Dashboard
+            </Link>
+          )}
+          {role === 'admin' && (
+            <Link to="/admin" className={linkClasses("/admin")}>
+              Admin Panel
             </Link>
           )}
         </nav>

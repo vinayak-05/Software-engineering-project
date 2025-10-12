@@ -3,7 +3,7 @@ import api from '../lib/api'
 
 export default function Dashboard() {
   const [myProducts, setMyProducts] = useState([])
-  const [form, setForm] = useState({ name: '', category: '', price: '', unit: 'kg', quantity: '' })
+  const [form, setForm] = useState({ name: '', price: '', unit: 'kg', quantity: '', description: '' })
   const [predictForm, setPredictForm] = useState({ crop: '', location: '', quantity: 100 })
 
   useEffect(() => {
@@ -14,13 +14,30 @@ export default function Dashboard() {
     e.preventDefault()
     const res = await api.post('/products', form)
     setMyProducts(prev => [res.data, ...prev])
-    setForm({ name: '', category: '', price: '', unit: 'kg', quantity: '' })
+    setForm({ name: '', price: '', unit: 'kg', quantity: '', description: '' })
   }
 
   const predict = async (e) => {
     e.preventDefault()
-    const { data } = await api.post('/pricing/predict', predictForm)
-    alert(`Predicted price: ₹ ${data.price}`)
+    console.log('Predicting...', predictForm)
+    try {
+      const { data } = await api.post('/pricing/predict', predictForm)
+      console.log('Response:', data)
+      alert(`Predicted price per kg: ₹ ${data.pricePerKg}\nTotal price: ₹ ${data.totalPrice}`)
+    } catch (error) {
+      console.log('Error:', error)
+      alert(`Error predicting price: ${error.response?.data?.message || 'Unknown error'}`)
+    }
+  }
+
+  const deleteProduct = async (id) => {
+    if (!confirm('Are you sure you want to remove this crop?')) return
+    try {
+      await api.delete(`/products/${id}`)
+      setMyProducts(prev => prev.filter(p => p._id !== id))
+    } catch (error) {
+      alert(`Error deleting product: ${error.response?.data?.message || 'Unknown error'}`)
+    }
   }
 
   return (
@@ -29,7 +46,6 @@ export default function Dashboard() {
         <h3 className='text-lg font-semibold mb-3'>List New Crop</h3>
         <form className='grid gap-3' onSubmit={submit}>
           <input className='border rounded-lg p-2' placeholder='Name' value={form.name} onChange={e=>setForm({...form,name:e.target.value})} required/>
-          <input className='border rounded-lg p-2' placeholder='Category' value={form.category} onChange={e=>setForm({...form,category:e.target.value})} required/>
           <div className='grid grid-cols-2 gap-3'>
             <input className='border rounded-lg p-2' type='number' placeholder='Price (₹)' value={form.price} onChange={e=>setForm({...form,price:e.target.value})} required/>
             <select className='border rounded-lg p-2' value={form.unit} onChange={e=>setForm({...form,unit:e.target.value})}>
@@ -37,6 +53,7 @@ export default function Dashboard() {
             </select>
           </div>
           <input className='border rounded-lg p-2' type='number' placeholder='Quantity' value={form.quantity} onChange={e=>setForm({...form,quantity:e.target.value})} required/>
+          <textarea className='border rounded-lg p-2' placeholder='Description (address, contact, etc.)' value={form.description} onChange={e=>setForm({...form,description:e.target.value})} rows='3' required></textarea>
           <button className='btn bg-black text-white' type='submit'>Publish</button>
         </form>
       </div>
@@ -58,6 +75,7 @@ export default function Dashboard() {
             <div key={p._id} className='border rounded-xl p-3'>
               <div className='font-medium'>{p.name}</div>
               <div className='text-sm text-gray-500'>₹ {p.price} / {p.unit}</div>
+              <button onClick={() => deleteProduct(p._id)} className='mt-2 bg-red-500 text-white px-2 py-1 rounded text-sm'>Remove</button>
             </div>
           ))}
         </div>

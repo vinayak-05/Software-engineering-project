@@ -43,6 +43,20 @@ export default function Home() {
           <li>Smart <span className="font-semibold">dashboards</span> show live schemes & price predictions.</li>
         </ol>
       </div>
+
+      <div className="md:col-span-2 card bg-white rounded-2xl shadow-lg p-6 border mt-8">
+        <h3 className="text-xl font-semibold mb-4 text-green-800">📞 Contact & Support</h3>
+        <div className="space-y-3">
+          <p className="flex items-center space-x-2">
+            <span className="text-green-600">📧</span>
+            <span className="text-black"><strong>Email:</strong> admin@agrolink.com</span>
+          </p>
+          <p className="flex items-center space-x-2">
+            <span className="text-green-600">📞</span>
+            <span className="text-black"><strong>Phone:</strong> +1 (123) 456-7890</span>
+          </p>
+        </div>
+      </div>
     </section>
   )
 }

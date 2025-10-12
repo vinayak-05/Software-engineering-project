@@ -3,10 +3,13 @@ import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
+import cartRoutes from "./routes/cartRoutes.js";
 import cropRoutes from "./routes/cropRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import schemeRoutes from "./routes/schemeRoutes.js";
 import pricingRoutes from "./routes/pricingRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
+import supportRoutes from "./routes/supportRoutes.js";
 
 dotenv.config();
 
@@ -21,6 +24,9 @@ connectDB();
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/admin", adminRoutes);
+app.use("/api/support", supportRoutes);
+app.use("/api/cart", cartRoutes);
 app.use("/api/crops", cropRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/schemes", schemeRoutes);

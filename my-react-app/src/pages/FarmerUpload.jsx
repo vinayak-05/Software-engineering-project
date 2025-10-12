@@ -7,6 +7,8 @@ export default function FarmerUpload() {
   const [cropName, setCropName] = useState("");
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
+  const [unit, setUnit] = useState("kg");
+  const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
   const [message, setMessage] = useState("");
   const { token } = useContext(AuthContext);
@@ -24,6 +26,8 @@ export default function FarmerUpload() {
       formData.append("cropName", cropName);
       formData.append("price", price);
       formData.append("quantity", quantity);
+      formData.append("unit", unit);
+      formData.append("description", description);
       if (image) {
         formData.append("image", image);
       }
@@ -68,12 +72,32 @@ export default function FarmerUpload() {
             className="w-full px-4 py-2 border rounded-lg"
           />
 
-          <input
-            type="number"
-            placeholder="Quantity (Kg)"
-            value={quantity}
-            onChange={(e) => setQuantity(e.target.value)}
+          <div className="grid grid-cols-2 gap-2">
+            <input
+              type="number"
+              placeholder="Quantity"
+              value={quantity}
+              onChange={(e) => setQuantity(e.target.value)}
+              required
+              className="w-full px-4 py-2 border rounded-lg"
+            />
+            <select
+              value={unit}
+              onChange={(e) => setUnit(e.target.value)}
+              className="w-full px-4 py-2 border rounded-lg"
+            >
+              <option value="kg">kg</option>
+              <option value="quintal">quintal</option>
+              <option value="tonne">tonne</option>
+            </select>
+          </div>
+
+          <textarea
+            placeholder="Description (address, contact, etc.)"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             required
+            rows="3"
             className="w-full px-4 py-2 border rounded-lg"
           />
 
@@ -81,7 +105,6 @@ export default function FarmerUpload() {
             type="file"
             accept="image/*"
             onChange={(e) => setImage(e.target.files[0])}
-            required
             className="w-full"
           />
 

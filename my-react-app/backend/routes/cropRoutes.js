@@ -19,12 +19,14 @@ const upload = multer({ storage });
 // 👉 Farmer: Upload crop (protected route)
 router.post("/upload", protect, upload.single("image"), async (req, res) => {
   try {
-    const { cropName, price, quantity } = req.body;
+    const { cropName, price, quantity, unit, description } = req.body;
 
     const crop = new Crop({
       name: cropName,
       price,
+      unit: unit || 'kg',
       quantity,
+      description,
       image: req.file ? `/uploads/${req.file.filename}` : null,
       farmer: req.user.id,
     });
@@ -40,8 +42,14 @@ router.post("/upload", protect, upload.single("image"), async (req, res) => {
 // 👉 Consumer: Get all crops
 router.get("/", async (req, res) => {
   try {
-    const crops = await Crop.find().sort({ createdAt: -1 });
-    res.json(crops);
+    const crops = await Crop.find()
+      .populate("farmer", "name email")
+      .sort({ createdAt: -1 });
+    const cropsWithFarmerName = crops.map(crop => ({
+      ...crop.toObject(),
+      farmerName: crop.farmer ? crop.farmer.name : 'Unknown Farmer'
+    }));
+    res.json(cropsWithFarmerName);
   } catch (error) {
     res.status(500).json({ message: "Error fetching crops" });
   }

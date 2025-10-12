@@ -1,21 +1,11 @@
-# Registration Fix Plan
+# TODO: Improve Contact Page UI
 
-## Issues Identified:
-1. ✅ Port mismatch: Frontend API (4000) vs Backend (5000) - FIXED
-2. ✅ Missing error handling in Register component - FIXED
-3. ✅ Role mismatch: Frontend "buyer" vs Backend "customer" - FIXED
-4. ✅ Environment variables check - VERIFIED (env file exists)
-5. ✅ Navbar not updating after registration - FIXED with AuthContext
-
-## Steps to Complete:
-- [x] Fix API base URL port in src/lib/api.js
-- [x] Add error handling to Register.jsx component
-- [x] Fix role options in Register.jsx (buyer → customer)
-- [x] Check environment variables setup
-- [x] Test registration functionality - SUCCESSFUL
-- [x] Create AuthContext for global auth state management
-- [x] Update App.jsx to use AuthProvider
-- [x] Update Navbar.jsx to use AuthContext
-- [x] Update Register.jsx to use AuthContext
-- [x] Update Login.jsx to use AuthContext
-- [ ] Test complete auth flow (register → navbar update → login → logout)
+## Tasks
+- [x] Update outer container background to bg-gray-900 for dark theme integration
+- [x] Change card background to bg-gray-800 with border-gray-700 for modern dark look
+- [x] Adjust title text color to text-white
+- [x] Update textarea styling: bg-gray-700 text-white placeholder-gray-400
+- [x] Enhance button with gradient: bg-gradient-to-r from-blue-600 to-blue-700 and hover effects
+- [x] Improve status message visibility: text-green-400 for success, text-red-400 for errors
+- [x] Add subtle shadows and better spacing for attractiveness
+- [ ] Test the UI changes by running the development server
