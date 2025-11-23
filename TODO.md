@@ -1,3 +1,6 @@
 - [x] Enhance ProductCard component: add image display, quantity selector, improved styling
 - [x] Enhance Marketplace component: add search bar, category filter, update layout
 - [x] Test the enhanced UI and fix text visibility issue
+- [x] Integrate ML model for price prediction in farmer dashboard
+- [x] Create backend API for price prediction
+- [x] Update Dashboard.jsx with price prediction form

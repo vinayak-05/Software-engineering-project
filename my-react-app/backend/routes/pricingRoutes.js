@@ -12,6 +12,16 @@ const router = express.Router();
 router.post("/predict", async (req, res) => {
   try {
     const { crop, location, quantity } = req.body;
+    
+    console.log('Prediction request:', { crop, location, quantity });
+
+    // Validate inputs
+    if (!crop || !location || !quantity) {
+      return res.status(400).json({ 
+        message: "Missing required fields",
+        received: { crop, location, quantity }
+      });
+    }
 
     // Run Python script for prediction
     const pythonProcess = spawn('python', [
@@ -40,14 +50,36 @@ router.post("/predict", async (req, res) => {
 
     pythonProcess.on('close', (code) => {
       clearTimeout(timeout);
+      
+      console.log('Python exit code:', code);
+      console.log('Python stdout:', prediction);
+      console.log('Python stderr:', error);
+      
       if (code !== 0) {
         console.error('Python script error:', error);
-        return res.status(500).json({ message: "Error running AI model" });
+        return res.status(500).json({ 
+          message: "Error running AI model",
+          details: error 
+        });
       }
 
       const predictedPrice = parseFloat(prediction.trim());
-      if (isNaN(predictedPrice)) {
-        return res.status(500).json({ message: "Invalid prediction from AI model" });
+      console.log('Parsed price:', predictedPrice);
+      
+      if (isNaN(predictedPrice) || predictedPrice === 0) {
+        console.error('Invalid prediction:', prediction);
+        
+        // Check if crop name was swapped with location
+        const errorHint = error.includes('not found in dataset') 
+          ? `Make sure crop name is correct. Received: crop="${crop}", location="${location}"`
+          : 'Check if crop and location are spelled correctly';
+        
+        return res.status(500).json({ 
+          message: `Invalid prediction from AI model. ${errorHint}`,
+          rawOutput: prediction,
+          stderr: error,
+          hint: "Try: crop=Tomato, location=Bangalore"
+        });
       }
 
       // Adjust based on quantity (simple multiplier)
@@ -57,8 +89,9 @@ router.post("/predict", async (req, res) => {
         crop,
         location,
         quantity,
-        pricePerKg: predictedPrice,
-        totalPrice
+        pricePerKg: predictedPrice, // Note: This is actually price per quintal from the model
+        totalPrice,
+        unit: 'quintal'
       });
     });
 

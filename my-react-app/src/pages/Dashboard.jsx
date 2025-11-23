@@ -4,7 +4,7 @@ import api from '../lib/api'
 export default function Dashboard() {
   const [myProducts, setMyProducts] = useState([])
   const [form, setForm] = useState({ name: '', price: '', unit: 'kg', quantity: '', description: '' })
-  const [predictForm, setPredictForm] = useState({ crop: '', location: '', quantity: 100 })
+  const [predictForm, setPredictForm] = useState({ crop: '', location: '', quantity: 10 })
 
   useEffect(() => {
     api.get('/products/mine').then(res => setMyProducts(res.data))
@@ -23,7 +23,7 @@ export default function Dashboard() {
     try {
       const { data } = await api.post('/pricing/predict', predictForm)
       console.log('Response:', data)
-      alert(`Predicted price per kg: ₹ ${data.pricePerKg}\nTotal price: ₹ ${data.totalPrice}`)
+      alert(`Predicted price per quintal: ₹ ${data.pricePerKg}\nTotal price for ${data.quantity} quintal: ₹ ${data.totalPrice}`)
     } catch (error) {
       console.log('Error:', error)
       alert(`Error predicting price: ${error.response?.data?.message || 'Unknown error'}`)
@@ -61,10 +61,22 @@ export default function Dashboard() {
       <div className='card'>
         <h3 className='text-lg font-semibold mb-3'>Price Prediction (Demo)</h3>
         <form className='grid gap-3' onSubmit={predict}>
-          <input className='border rounded-lg p-2' placeholder='Crop' value={predictForm.crop} onChange={e=>setPredictForm({...predictForm,crop:e.target.value})} required/>
-          <input className='border rounded-lg p-2' placeholder='Location' value={predictForm.location} onChange={e=>setPredictForm({...predictForm,location:e.target.value})} required/>
-          <input className='border rounded-lg p-2' type='number' placeholder='Quantity' value={predictForm.quantity} onChange={e=>setPredictForm({...predictForm,quantity:Number(e.target.value)})} required/>
-          <button className='btn bg-green-600 text-white' type='submit'>Predict</button>
+          <div>
+            <label className='block text-sm text-gray-600 mb-1'>Crop Name</label>
+            <input className='border rounded-lg p-2 w-full' placeholder='e.g., Tomato, Cabbage, Carrot' value={predictForm.crop} onChange={e=>setPredictForm({...predictForm,crop:e.target.value})} required/>
+            <p className='text-xs text-gray-500 mt-1'>Try: Tomato, Cabbage, Carrot, Brinjal, Beetroot, Capsicum</p>
+          </div>
+          <div>
+            <label className='block text-sm text-gray-600 mb-1'>Location (District)</label>
+            <input className='border rounded-lg p-2 w-full' placeholder='e.g., Bangalore, Mysore, Hubli' value={predictForm.location} onChange={e=>setPredictForm({...predictForm,location:e.target.value})} required/>
+            <p className='text-xs text-gray-500 mt-1'>Try: Bangalore, Mysore, Hubli, Kolar, Belgaum</p>
+          </div>
+          <div>
+            <label className='block text-sm text-gray-600 mb-1'>Quantity (quintal)</label>
+            <input className='border rounded-lg p-2 w-full' type='number' placeholder='10' value={predictForm.quantity} onChange={e=>setPredictForm({...predictForm,quantity:Number(e.target.value)})} required/>
+            <p className='text-xs text-gray-500 mt-1'>1 quintal = 100 kg</p>
+          </div>
+          <button className='btn bg-green-600 text-white' type='submit'>Predict Price</button>
         </form>
       </div>
 

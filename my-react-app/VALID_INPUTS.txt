@@ -1,0 +1,69 @@
+========================================
+VALID CROPS AND LOCATIONS FOR PRICE PREDICTION
+========================================
+
+HOW TO USE:
+1. Enter CROP name in the "Crop Name" field
+2. Enter LOCATION (district) in the "Location" field
+3. Enter quantity in QUINTAL (1 quintal = 100 kg)
+
+⚠️ IMPORTANT: Don't swap crop and location!
+   ✅ Correct: crop=Tomato, location=Bangalore
+   ❌ Wrong: crop=Bangalore, location=Tomato
+
+⚠️ NOTE: Prices are predicted per QUINTAL, not per kg!
+
+========================================
+VALID CROPS (Sample):
+========================================
+- Tomato
+- Cabbage
+- Carrot
+- Beetroot
+- Brinjal
+- Capsicum
+- Cauliflower
+- Beans (Whole)
+- Bitter Gourd
+- Bottle Gourd
+- Bhindi
+- Banana - Green
+- Arhar (Whole)
+- Black Gram (Whole)
+- Broken Rice
+
+========================================
+VALID LOCATIONS (Districts):
+========================================
+- Bangalore
+- Mysore
+- Hubli
+- Belgaum
+- Kolar
+- Hassan
+- Haveri
+- Bagalkot
+- Bellary
+- Bidar
+- Chamrajnagar
+- Chikmagalur
+- Davangere
+- Dharwad
+- Gadag
+- Kalburgi
+- Karwar(Uttar Kannad)
+
+========================================
+EXAMPLE WORKING COMBINATIONS:
+========================================
+1. Crop: Tomato       | Location: Bangalore  | Quantity: 10 quintal
+2. Crop: Cabbage      | Location: Mysore     | Quantity: 5 quintal
+3. Crop: Carrot       | Location: Hubli      | Quantity: 20 quintal
+4. Crop: Brinjal      | Location: Belgaum    | Quantity: 15 quintal
+5. Crop: Beetroot     | Location: Hassan     | Quantity: 7 quintal
+6. Crop: Capsicum     | Location: Bangalore  | Quantity: 10 quintal
+
+========================================
+NOTE: Crop and location names are case-sensitive!
+Use exact spelling as shown above.
+========================================

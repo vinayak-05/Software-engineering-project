@@ -7,7 +7,7 @@ export default function Home() {
       {/* Left Content */}
       <div className="space-y-6">
         <h1 className="text-5xl font-extrabold leading-tight text-green-800">
-          🌾 Direct Farm-to-Business Platform
+          🌾 Agroconnect - Direct Farm-to-Business Platform
         </h1>
         <p className="text-lg text-gray-600 max-w-lg">
           Empowering <span className="font-semibold text-green-700">farmers</span> and 
